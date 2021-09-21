@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:twitter_login/twitter_login.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late GoogleSignIn? _googleSignIn;
+  CustomFacebookLoginStatus currentFacebookStatus =
+      CustomFacebookLoginStatus.none;
+  static final FacebookLogin? facebookSignIn = new FacebookLogin();
 
   @override
   void initState() {
@@ -62,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 onPressed: () async {
-                  await onPressGoogleLogin();
+                  await onPressFacebookLogin();
                   print("Facebook");
                   //onPressGoogleLogin();
                 },
@@ -105,6 +109,33 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  onPressFacebookLogin() async {
+    try {
+      final plugin = FacebookLogin(debug: false);
+
+      FacebookLoginResult result = await plugin.logIn(permissions: [
+        FacebookPermission.publicProfile,
+        FacebookPermission.email,
+      ]);
+
+      currentFacebookStatus = casteFacebookState(result.status);
+
+      if (result.accessToken != null &&
+          result.status == FacebookLoginStatus.success) {
+        final FacebookAccessToken accessToken = result.accessToken!;
+        print('Access token: ${accessToken.token}');
+        print('UID: ${accessToken.userId}');
+
+        final profile = await facebookSignIn!.getUserProfile();
+        print('Hello, ${profile!.name}! You ID: ${profile.userId}');
+      }
+
+      return;
+    } catch (error) {
+      print(error);
+    }
+  }
+
   onPressTwitterLogin() async {
     try {
       GoogleSignInAccount? result = await _googleSignIn!.signIn();
@@ -119,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<bool?> signInWithTwitter() async {
+  signInWithTwitter() async {
     try {
       final twitterLogin = TwitterLogin(
         apiKey: "IOCSQXQaLlHdlDTp1aruqj89d",
@@ -150,5 +181,18 @@ class _LoginPageState extends State<LoginPage> {
     //   default:
     //     return null;
     //  }
+  }
+}
+
+enum CustomFacebookLoginStatus { success, cancel, error, none }
+
+CustomFacebookLoginStatus casteFacebookState(FacebookLoginStatus status) {
+  switch (status) {
+    case FacebookLoginStatus.success:
+      return CustomFacebookLoginStatus.success;
+    case FacebookLoginStatus.error:
+      return CustomFacebookLoginStatus.error;
+    case FacebookLoginStatus.cancel:
+      return CustomFacebookLoginStatus.cancel;
   }
 }
