@@ -27,26 +27,50 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        children: [
-          ElevatedButton(
-            child: Text(
-              "Google",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 14,
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: Colors.red),
+                child: Text(
+                  "Google",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                  ),
+                ),
+                onPressed: () async {
+                  await onPressGoogleLogin();
+                  print("Prueba");
+                  //onPressGoogleLogin();
+                },
               ),
-            ),
-            onPressed: () async {
-              await onPressGoogleLogin();
-              print("Prueba");
-              //onPressGoogleLogin();
-            },
+              
+              SizedBox(height: 20),
+        
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: Colors.blue),
+                child: Text(
+                  "Facebook",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                  ),
+                ),
+                onPressed: () async {
+                  await onPressGoogleLogin();
+                  print("Prueba");
+                  //onPressGoogleLogin();
+                },
+              ),
+            ],
           ),
-
-          SizedBox(height: 40),
-        ],
+        ),
       ),
     );
   }
