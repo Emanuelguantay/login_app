@@ -51,7 +51,6 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   await onPressGoogleLogin();
                   print("Google");
-                  //onPressGoogleLogin();
                 },
               ),
               SizedBox(height: 20),
@@ -68,7 +67,6 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   await onPressFacebookLogin();
                   print("Facebook");
-                  //onPressGoogleLogin();
                 },
               ),
               SizedBox(height: 20),
@@ -85,7 +83,6 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   await signInWithTwitter();
                   print("Twitter");
-                  //onPressGoogleLogin();
                 },
               ),
             ],
