@@ -31,14 +31,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: const Text("start ui"),
                 onPressed: () async {
                   final providers = [
-                    AuthUiProvider.anonymous,
-                    AuthUiProvider.email,
-                    AuthUiProvider.phone,
-                    AuthUiProvider.apple,
-                    AuthUiProvider.github,
-                    AuthUiProvider.google,
                     AuthUiProvider.microsoft,
-                    AuthUiProvider.yahoo,
                   ];
 
                   final result = await FlutterAuthUi.startUi(
