@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_auth_ui/flutter_auth_ui.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:firebase_core/firebase_core.dart';
 
@@ -11,17 +11,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late GoogleSignIn? _googleSignIn;
+  
 
   @override
   void initState() {
     super.initState();
-    _googleSignIn = GoogleSignIn(
-      scopes: <String>[
-        'email',
-        'https://www.googleapis.com/auth/contacts.readonly',
-      ],
-    );
   }
 
   @override
@@ -34,38 +28,39 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.red),
-                child: Text(
-                  "Google",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.normal,
-                    fontSize: 14,
-                  ),
-                ),
+                child: const Text("start ui"),
                 onPressed: () async {
-                  await onPressGoogleLogin();
-                  print("Prueba");
-                  //onPressGoogleLogin();
-                },
-              ),
-              
-              SizedBox(height: 20),
-        
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.blue),
-                child: Text(
-                  "Facebook",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.normal,
-                    fontSize: 14,
-                  ),
-                ),
-                onPressed: () async {
-                  await onPressGoogleLogin();
-                  print("Prueba");
-                  //onPressGoogleLogin();
+                  final providers = [
+                    AuthUiProvider.anonymous,
+                    AuthUiProvider.email,
+                    AuthUiProvider.phone,
+                    AuthUiProvider.apple,
+                    AuthUiProvider.github,
+                    AuthUiProvider.google,
+                    AuthUiProvider.microsoft,
+                    AuthUiProvider.yahoo,
+                  ];
+
+                  final result = await FlutterAuthUi.startUi(
+                    items: providers,
+                    tosAndPrivacyPolicy: TosAndPrivacyPolicy(
+                      tosUrl: "https://www.google.com",
+                      privacyPolicyUrl: "https://www.google.com",
+                    ),
+                    androidOption: AndroidOption(
+                      enableSmartLock: false, // default true
+                      showLogo: true, // default false
+                      overrideTheme: true, // default false
+                    ),
+                    emailAuthOption: EmailAuthOption(
+                      requireDisplayName: true, // default true
+                      enableMailLink: false, // default false
+                      handleURL: '',
+                      androidPackageName: '',
+                      androidMinimumVersion: '',
+                    ),
+                  );
+                  print(result);
                 },
               ),
             ],
@@ -73,20 +68,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  onPressGoogleLogin() async {
-    try {
-      GoogleSignInAccount? result = await _googleSignIn!.signIn();
-
-      if (result != null) {
-        print (result.id);
-        String firstName = "";
-        String lastName = "";
-        
-      }
-    } catch (error) {
-      print(error);
-    }
   }
 }
