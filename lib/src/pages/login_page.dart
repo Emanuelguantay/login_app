@@ -17,7 +17,8 @@ class _LoginPageState extends State<LoginPage> {
   CustomFacebookLoginStatus currentFacebookStatus =
       CustomFacebookLoginStatus.none;
   static final FacebookLogin? facebookSignIn = new FacebookLogin();
-
+//Outlook
+// https://stackoverflow.com/questions/63674335/b2c-plataform-android-reply-url
   @override
   void initState() {
     super.initState();
@@ -83,6 +84,22 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   await signInWithTwitter();
                   print("Twitter");
+                },
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: Colors.lightBlue),
+                child: Text(
+                  "Outlook",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                  ),
+                ),
+                onPressed: () async {
+                  await signInWithOutlook();
+                  print("Outlook");
                 },
               ),
             ],
@@ -179,6 +196,22 @@ class _LoginPageState extends State<LoginPage> {
     //     return null;
     //  }
   }
+
+  signInWithOutlook() async {
+    try {
+      final twitterLogin = TwitterLogin(
+        apiKey: "IOCSQXQaLlHdlDTp1aruqj89d",
+        apiSecretKey: "YEgKy2hiJwlWIdsSvJgMbirUeHOm1MHWF36JNUO3AoWg2tTOAQ",
+        redirectURI: "edesa-app://",
+      );
+      final authResult = await twitterLogin.login();
+
+      print(authResult);
+    } catch (error) {
+      print(error);
+    }
+  }
+
 }
 
 enum CustomFacebookLoginStatus { success, cancel, error, none }
